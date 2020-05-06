@@ -54,7 +54,7 @@ class FixedWinnerVotingSystem(VotingSystem, metaclass=ABCMeta):
 
     def as_dict(self):
         data = super(FixedWinnerVotingSystem, self).as_dict()
-        if hasattr(self, 'tied_winners'):
+        if hasattr(self, "tied_winners"):
             data["tied_winners"] = self.tied_winners
         return data
 
@@ -93,10 +93,14 @@ class AbstractSingleWinnerVotingSystem(SingleWinnerVotingSystem, metaclass=ABCMe
     @abstractmethod
     def __init__(self, ballots, multiple_winner_class, tie_breaker=None):
         self.multiple_winner_class = multiple_winner_class
-        super(AbstractSingleWinnerVotingSystem, self).__init__(ballots, tie_breaker=tie_breaker)
+        super(AbstractSingleWinnerVotingSystem, self).__init__(
+            ballots, tie_breaker=tie_breaker
+        )
 
     def calculate_results(self):
-        self.multiple_winner_instance = self.multiple_winner_class(self.ballots, tie_breaker=self.tie_breaker, required_winners=1)
+        self.multiple_winner_instance = self.multiple_winner_class(
+            self.ballots, tie_breaker=self.tie_breaker, required_winners=1
+        )
         self.__dict__.update(self.multiple_winner_instance.__dict__)
         self.winner = list(self.winners)[0]
         del self.winners
@@ -126,32 +130,37 @@ class OrderingVotingSystem(VotingSystem, metaclass=ABCMeta):
 # smaller subset of candidates until all candidates are consumed.
 class AbstractOrderingVotingSystem(OrderingVotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, single_winner_class, winner_threshold=None, tie_breaker=None):
+    def __init__(
+        self, ballots, single_winner_class, winner_threshold=None, tie_breaker=None
+    ):
         self.single_winner_class = single_winner_class
-        super(AbstractOrderingVotingSystem, self).__init__(ballots, winner_threshold=winner_threshold, tie_breaker=tie_breaker)
+        super(AbstractOrderingVotingSystem, self).__init__(
+            ballots, winner_threshold=winner_threshold, tie_breaker=tie_breaker
+        )
 
     def calculate_results(self):
         self.order = []
         self.rounds = []
         remaining_ballots = deepcopy(self.ballots)
         remaining_candidates = True
-        while (
-            (remaining_candidates is True or len(remaining_candidates) > 1)
-            and (self.winner_threshold is None or len(self.order) < self.winner_threshold)
+        while (remaining_candidates is True or len(remaining_candidates) > 1) and (
+            self.winner_threshold is None or len(self.order) < self.winner_threshold
         ):
 
             # Given the remaining ballots, who should win?
-            result = self.single_winner_class(deepcopy(remaining_ballots), tie_breaker=self.tie_breaker)
+            result = self.single_winner_class(
+                deepcopy(remaining_ballots), tie_breaker=self.tie_breaker
+            )
 
             # Mark the candidate that won
-            r = {'winner': result.winner}
-            self.order.append(r['winner'])
+            r = {"winner": result.winner}
+            self.order.append(r["winner"])
 
             # Mark any ties that might have occurred
-            if hasattr(result, 'tie_breaker'):
+            if hasattr(result, "tie_breaker"):
                 self.tie_breaker = result.tie_breaker
-                if hasattr(result, 'tied_winners'):
-                    r['tied_winners'] = result.tied_winners
+                if hasattr(result, "tied_winners"):
+                    r["tied_winners"] = result.tied_winners
             self.rounds.append(r)
 
             # Remove the candidate from the remaining candidates and ballots
@@ -159,12 +168,14 @@ class AbstractOrderingVotingSystem(OrderingVotingSystem, metaclass=ABCMeta):
                 self.candidates = result.candidates
                 remaining_candidates = copy(self.candidates)
             remaining_candidates.remove(result.winner)
-            remaining_ballots = self.ballots_without_candidate(result.ballots, result.winner)
+            remaining_ballots = self.ballots_without_candidate(
+                result.ballots, result.winner
+            )
 
         # Note the last remaining candidate
-        if (self.winner_threshold is None or len(self.order) < self.winner_threshold):
-            r = {'winner': list(remaining_candidates)[0]}
-            self.order.append(r['winner'])
+        if self.winner_threshold is None or len(self.order) < self.winner_threshold:
+            r = {"winner": list(remaining_candidates)[0]}
+            self.order.append(r["winner"])
             self.rounds.append(r)
 
     def as_dict(self):

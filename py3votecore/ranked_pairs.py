@@ -22,9 +22,10 @@ from copy import deepcopy
 
 # This class implements the Schulze Method (aka the beatpath method)
 class RankedPairs(CondorcetSystem, CondorcetHelper):
-
     def __init__(self, ballots, tie_breaker=None, ballot_notation=None):
-        super(RankedPairs, self).__init__(ballots, tie_breaker=tie_breaker, ballot_notation=ballot_notation)
+        super(RankedPairs, self).__init__(
+            ballots, tie_breaker=tie_breaker, ballot_notation=ballot_notation
+        )
 
     def condorcet_completion_method(self):
 
@@ -64,6 +65,6 @@ class RankedPairs(CondorcetSystem, CondorcetHelper):
 
     def as_dict(self):
         data = super(RankedPairs, self).as_dict()
-        if hasattr(self, 'rounds'):
+        if hasattr(self, "rounds"):
             data["rounds"] = self.rounds
         return data

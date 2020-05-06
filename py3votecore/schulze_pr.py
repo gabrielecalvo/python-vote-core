@@ -21,13 +21,12 @@ from pygraph.classes.digraph import digraph
 
 
 class SchulzePR(OrderingVotingSystem, SchulzeHelper):
-
-    def __init__(self, ballots, tie_breaker=None, winner_threshold=None, ballot_notation=None):
+    def __init__(
+        self, ballots, tie_breaker=None, winner_threshold=None, ballot_notation=None
+    ):
         self.standardize_ballots(ballots, ballot_notation)
         super(SchulzePR, self).__init__(
-            self.ballots,
-            tie_breaker=tie_breaker,
-            winner_threshold=winner_threshold,
+            self.ballots, tie_breaker=tie_breaker, winner_threshold=winner_threshold,
         )
 
     def calculate_results(self):
@@ -55,9 +54,13 @@ class SchulzePR(OrderingVotingSystem, SchulzeHelper):
 
             # Generate the edges between nodes
             for candidate_from in remaining_candidates:
-                other_candidates = sorted(list(remaining_candidates - set([candidate_from])))
+                other_candidates = sorted(
+                    list(remaining_candidates - set([candidate_from]))
+                )
                 for candidate_to in other_candidates:
-                    completed = self.proportional_completion(candidate_from, set([candidate_to]) | set(self.order))
+                    completed = self.proportional_completion(
+                        candidate_from, set([candidate_to]) | set(self.order)
+                    )
                     weight = self.strength_of_vote_management(completed)
                     if weight > 0:
                         self.graph.add_edge((candidate_to, candidate_from), weight)
@@ -74,11 +77,13 @@ class SchulzePR(OrderingVotingSystem, SchulzeHelper):
             remaining_candidates -= set([self.winner])
             del self.winner
             del self.actions
-            if hasattr(self, 'tied_winners'):
+            if hasattr(self, "tied_winners"):
                 del self.tied_winners
 
         # Attach the last candidate as the sole winner if necessary
-        if self.winner_threshold is None or self.winner_threshold == len(self.candidates):
+        if self.winner_threshold is None or self.winner_threshold == len(
+            self.candidates
+        ):
             self.rounds.append({"winner": list(remaining_candidates)[0]})
             self.order.append(list(remaining_candidates)[0])
 

@@ -26,20 +26,23 @@ class TestInstantRunoff(unittest.TestCase):
         input = [
             {"count": 26, "ballot": ["c1", "c2", "c3"]},
             {"count": 20, "ballot": ["c2", "c3", "c1"]},
-            {"count": 23, "ballot": ["c3", "c1", "c2"]}
+            {"count": 23, "ballot": ["c3", "c1", "c2"]},
         ]
         output = IRV(input).as_dict()
 
         # Run tests
-        self.assertEqual(output, {
-            'candidates': set(['c1', 'c2', 'c3']),
-            'quota': 35,
-            'winner': 'c3',
-            'rounds': [
-                {'tallies': {'c3': 23.0, 'c2': 20.0, 'c1': 26.0}, 'loser': 'c2'},
-                {'tallies': {'c3': 43.0, 'c1': 26.0}, 'winner': 'c3'}
-            ]
-        })
+        self.assertEqual(
+            output,
+            {
+                "candidates": set(["c1", "c2", "c3"]),
+                "quota": 35,
+                "winner": "c3",
+                "rounds": [
+                    {"tallies": {"c3": 23.0, "c2": 20.0, "c1": 26.0}, "loser": "c2"},
+                    {"tallies": {"c3": 43.0, "c1": 26.0}, "winner": "c3"},
+                ],
+            },
+        )
 
     # IRV, ties
     def test_irv_ties(self):
@@ -48,7 +51,7 @@ class TestInstantRunoff(unittest.TestCase):
         input = [
             {"count": 26, "ballot": ["c1", "c2", "c3"]},
             {"count": 20, "ballot": ["c2", "c3", "c1"]},
-            {"count": 20, "ballot": ["c3", "c1", "c2"]}
+            {"count": 20, "ballot": ["c3", "c1", "c2"]},
         ]
         output = IRV(input).as_dict()
 
@@ -56,9 +59,11 @@ class TestInstantRunoff(unittest.TestCase):
         self.assertEqual(output["quota"], 34)
         self.assertEqual(len(output["rounds"]), 2)
         self.assertEqual(len(output["rounds"][0]), 3)
-        self.assertEqual(output["rounds"][0]["tallies"], {'c1': 26, 'c2': 20, 'c3': 20})
-        self.assertEqual(output["rounds"][0]["tied_losers"], set(['c2', 'c3']))
-        self.assertTrue(output["rounds"][0]["loser"] in output["rounds"][0]["tied_losers"])
+        self.assertEqual(output["rounds"][0]["tallies"], {"c1": 26, "c2": 20, "c3": 20})
+        self.assertEqual(output["rounds"][0]["tied_losers"], set(["c2", "c3"]))
+        self.assertTrue(
+            output["rounds"][0]["loser"] in output["rounds"][0]["tied_losers"]
+        )
         self.assertEqual(len(output["rounds"][1]["tallies"]), 2)
         self.assertTrue("winner" in output["rounds"][1])
         self.assertEqual(len(output["tie_breaker"]), 3)
@@ -70,19 +75,23 @@ class TestInstantRunoff(unittest.TestCase):
         input = [
             {"count": 56, "ballot": ["c1", "c2", "c3"]},
             {"count": 20, "ballot": ["c2", "c3", "c1"]},
-            {"count": 20, "ballot": ["c3", "c1", "c2"]}
+            {"count": 20, "ballot": ["c3", "c1", "c2"]},
         ]
         output = IRV(input).as_dict()
 
         # Run tests
-        self.assertEqual(output, {
-            'candidates': set(['c1', 'c2', 'c3']),
-            'quota': 49,
-            'winner': 'c1',
-            'rounds': [
-                {'tallies': {'c3': 20.0, 'c2': 20.0, 'c1': 56.0}, 'winner': 'c1'}
-            ]
-        })
+        self.assertEqual(
+            output,
+            {
+                "candidates": set(["c1", "c2", "c3"]),
+                "quota": 49,
+                "winner": "c1",
+                "rounds": [
+                    {"tallies": {"c3": 20.0, "c2": 20.0, "c1": 56.0}, "winner": "c1"}
+                ],
+            },
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

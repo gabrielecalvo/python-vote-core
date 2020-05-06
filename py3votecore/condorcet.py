@@ -42,7 +42,10 @@ class CondorcetHelper(object):
             for ballot in self.ballots:
                 for candidate, rating in ballot["ballot"].items():
                     ballot["ballot"][candidate] = -float(rating)
-        elif ballot_notation == CondorcetHelper.BALLOT_NOTATION_RATING or ballot_notation is None:
+        elif (
+            ballot_notation == CondorcetHelper.BALLOT_NOTATION_RATING
+            or ballot_notation is None
+        ):
             for ballot in self.ballots:
                 for candidate, rating in ballot["ballot"].items():
                     ballot["ballot"][candidate] = float(rating)
@@ -74,19 +77,21 @@ class CondorcetHelper(object):
         graph = digraph()
         graph.add_nodes(candidates)
         for pair in itertools.permutations(candidates, 2):
-            graph.add_edge(pair, sum([
-                ballot["count"]
-                for ballot in ballots
-                if ballot["ballot"][pair[0]] > ballot["ballot"][pair[1]]
-            ]))
+            graph.add_edge(
+                pair,
+                sum(
+                    [
+                        ballot["count"]
+                        for ballot in ballots
+                        if ballot["ballot"][pair[0]] > ballot["ballot"][pair[1]]
+                    ]
+                ),
+            )
         return graph
 
     @staticmethod
     def edge_weights(graph):
-        return dict([
-            (edge, graph.edge_weight(edge))
-            for edge in graph.edges()
-        ])
+        return dict([(edge, graph.edge_weight(edge)) for edge in graph.edges()])
 
     @staticmethod
     def remove_weak_edges(graph):
@@ -98,11 +103,11 @@ class CondorcetHelper(object):
             if weights[1] >= weights[0]:
                 graph.del_edge(pairs[0])
 
+
 # This class determines the Condorcet winner if one exists.
 
 
 class CondorcetSystem(SingleWinnerVotingSystem, CondorcetHelper, metaclass=ABCMeta):
-
     @abstractmethod
     def __init__(self, ballots, tie_breaker=None, ballot_notation=None):
         self.standardize_ballots(ballots, ballot_notation)
@@ -117,10 +122,10 @@ class CondorcetSystem(SingleWinnerVotingSystem, CondorcetHelper, metaclass=ABCMe
 
     def as_dict(self):
         data = super(CondorcetSystem, self).as_dict()
-        if hasattr(self, 'pairs'):
+        if hasattr(self, "pairs"):
             data["pairs"] = self.pairs
-        if hasattr(self, 'strong_pairs'):
+        if hasattr(self, "strong_pairs"):
             data["strong_pairs"] = self.strong_pairs
-        if hasattr(self, 'tied_winners'):
+        if hasattr(self, "tied_winners"):
             data["tied_winners"] = self.tied_winners
         return data

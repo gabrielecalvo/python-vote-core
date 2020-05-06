@@ -21,16 +21,19 @@ import itertools
 
 
 class SchulzeSTV(MultipleWinnerVotingSystem, SchulzeHelper):
-
-    def __init__(self, ballots, tie_breaker=None, required_winners=1, ballot_notation=None):
+    def __init__(
+        self, ballots, tie_breaker=None, required_winners=1, ballot_notation=None
+    ):
         self.standardize_ballots(ballots, ballot_notation)
-        super(SchulzeSTV, self).__init__(self.ballots, tie_breaker=tie_breaker, required_winners=required_winners)
+        super(SchulzeSTV, self).__init__(
+            self.ballots, tie_breaker=tie_breaker, required_winners=required_winners
+        )
 
     def calculate_results(self):
 
         # Don't bother if everyone's going to win
         super(SchulzeSTV, self).calculate_results()
-        if hasattr(self, 'winners'):
+        if hasattr(self, "winners"):
             return
 
         # Generate the list of patterns we need to complete
@@ -39,18 +42,30 @@ class SchulzeSTV(MultipleWinnerVotingSystem, SchulzeHelper):
 
         # Build the graph of possible winners
         self.graph = digraph()
-        for candidate_set in itertools.combinations(self.candidates, self.required_winners):
+        for candidate_set in itertools.combinations(
+            self.candidates, self.required_winners
+        ):
             self.graph.add_nodes([tuple(sorted(list(candidate_set)))])
 
         # Generate the edges between nodes
-        for candidate_set in itertools.combinations(self.candidates, self.required_winners + 1):
+        for candidate_set in itertools.combinations(
+            self.candidates, self.required_winners + 1
+        ):
             for candidate in candidate_set:
                 other_candidates = sorted(set(candidate_set) - set([candidate]))
                 completed = self.proportional_completion(candidate, other_candidates)
                 weight = self.strength_of_vote_management(completed)
                 if weight > 0:
-                    for subset in itertools.combinations(other_candidates, len(other_candidates) - 1):
-                        self.graph.add_edge((tuple(other_candidates), tuple(sorted(list(subset) + [candidate]))), weight)
+                    for subset in itertools.combinations(
+                        other_candidates, len(other_candidates) - 1
+                    ):
+                        self.graph.add_edge(
+                            (
+                                tuple(other_candidates),
+                                tuple(sorted(list(subset) + [candidate])),
+                            ),
+                            weight,
+                        )
 
         # Determine the winner through the Schwartz set heuristic
         self.graph_winner()
@@ -61,6 +76,6 @@ class SchulzeSTV(MultipleWinnerVotingSystem, SchulzeHelper):
 
     def as_dict(self):
         data = super(SchulzeSTV, self).as_dict()
-        if hasattr(self, 'actions'):
-            data['actions'] = self.actions
+        if hasattr(self, "actions"):
+            data["actions"] = self.actions
         return data

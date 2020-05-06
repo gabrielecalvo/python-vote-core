@@ -20,8 +20,9 @@ from .schulze_method import SchulzeMethod
 
 #
 class SchulzeNPR(AbstractOrderingVotingSystem, SchulzeHelper):
-
-    def __init__(self, ballots, winner_threshold=None, tie_breaker=None, ballot_notation=None):
+    def __init__(
+        self, ballots, winner_threshold=None, tie_breaker=None, ballot_notation=None
+    ):
         self.standardize_ballots(ballots, ballot_notation)
         super(SchulzeNPR, self).__init__(
             self.ballots,
@@ -33,6 +34,6 @@ class SchulzeNPR(AbstractOrderingVotingSystem, SchulzeHelper):
     @staticmethod
     def ballots_without_candidate(ballots, candidate):
         for ballot in ballots:
-            if candidate in ballot['ballot']:
-                del ballot['ballot'][candidate]
+            if candidate in ballot["ballot"]:
+                del ballot["ballot"][candidate]
         return ballots

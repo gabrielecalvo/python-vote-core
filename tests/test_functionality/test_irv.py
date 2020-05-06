@@ -59,18 +59,18 @@ class TestInstantRunoff(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": {"c2", "c1", "c3"},
-                "tie_breaker": ["c2", "c1", "c3"],
-                "winner": "c1",
+                "candidates": {"c1", "c3", "c2"},
                 "quota": 34,
                 "rounds": [
                     {
-                        "tallies": {"c1": 26.0, "c2": 20.0, "c3": 20.0},
-                        "tied_losers": {"c2", "c3"},
                         "loser": "c3",
+                        "tallies": {"c1": 26.0, "c2": 20.0, "c3": 20.0},
+                        "tied_losers": {"c3", "c2"},
                     },
                     {"tallies": {"c1": 46.0, "c2": 20.0}, "winner": "c1"},
                 ],
+                "tie_breaker": ["c2", "c1", "c3"],
+                "winner": "c1",
             },
         )
 

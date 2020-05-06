@@ -21,7 +21,12 @@ from .schulze_method import SchulzeMethod
 #
 class SchulzeNPR(AbstractOrderingVotingSystem, SchulzeHelper):
     def __init__(
-        self, ballots, winner_threshold=None, tie_breaker=None, random_seed=None, ballot_notation=None
+        self,
+        ballots,
+        winner_threshold=None,
+        tie_breaker=None,
+        random_seed=None,
+        ballot_notation=None,
     ):
         self.standardize_ballots(ballots, ballot_notation)
         super().__init__(

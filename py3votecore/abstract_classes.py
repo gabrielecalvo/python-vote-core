@@ -99,7 +99,9 @@ class SingleWinnerVotingSystem(FixedWinnerVotingSystem, metaclass=ABCMeta):
 # Given a set of candidates, return a fixed number of winners
 class AbstractSingleWinnerVotingSystem(SingleWinnerVotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, multiple_winner_class, tie_breaker=None, random_seed=None):
+    def __init__(
+        self, ballots, multiple_winner_class, tie_breaker=None, random_seed=None
+    ):
         self.multiple_winner_class = multiple_winner_class
         super().__init__(ballots, tie_breaker=tie_breaker, random_seed=random_seed)
 
@@ -141,11 +143,19 @@ class OrderingVotingSystem(VotingSystem, metaclass=ABCMeta):
 class AbstractOrderingVotingSystem(OrderingVotingSystem, metaclass=ABCMeta):
     @abstractmethod
     def __init__(
-        self, ballots, single_winner_class, winner_threshold=None, tie_breaker=None, random_seed=None
+        self,
+        ballots,
+        single_winner_class,
+        winner_threshold=None,
+        tie_breaker=None,
+        random_seed=None,
     ):
         self.single_winner_class = single_winner_class
         super().__init__(
-            ballots, winner_threshold=winner_threshold, tie_breaker=tie_breaker, random_seed=random_seed
+            ballots,
+            winner_threshold=winner_threshold,
+            tie_breaker=tie_breaker,
+            random_seed=random_seed,
         )
 
     def calculate_results(self):

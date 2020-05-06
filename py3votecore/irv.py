@@ -3,15 +3,15 @@ from .stv import STV
 
 
 class IRV(AbstractSingleWinnerVotingSystem):
-    def __init__(self, ballots, tie_breaker=None):
-        super(IRV, self).__init__(ballots, STV, tie_breaker=tie_breaker)
+    def __init__(self, ballots, tie_breaker=None, random_seed=None):
+        super().__init__(ballots, STV, tie_breaker=tie_breaker, random_seed=random_seed)
 
     def calculate_results(self):
-        super(IRV, self).calculate_results()
+        super().calculate_results()
         IRV.singularize(self.rounds)
 
     def as_dict(self):
-        data = super(IRV, self).as_dict()
+        data = super().as_dict()
         IRV.singularize(data["rounds"])
         return data
 

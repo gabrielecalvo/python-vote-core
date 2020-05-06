@@ -16,20 +16,22 @@
 from .tie_breaker import TieBreaker
 from abc import ABCMeta, abstractmethod
 from copy import copy, deepcopy
-import types
 
 
 # This class provides methods that most electoral systems make use of.
 class VotingSystem(object, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, tie_breaker=None):
+    def __init__(self, ballots, tie_breaker=None, random_seed=None):
         self.ballots = ballots
         for ballot in self.ballots:
             if "count" not in ballot:
                 ballot["count"] = 1
         self.tie_breaker = tie_breaker
+        self.random_seed = random_seed
         if isinstance(self.tie_breaker, list):
-            self.tie_breaker = TieBreaker(self.tie_breaker)
+            self.tie_breaker = TieBreaker(
+                self.tie_breaker, random_seed=self.random_seed
+            )
         self.calculate_results()
 
     @abstractmethod
@@ -42,18 +44,20 @@ class VotingSystem(object, metaclass=ABCMeta):
 
     def break_ties(self, tied_objects, reverse_order=False):
         if self.tie_breaker is None:
-            self.tie_breaker = TieBreaker(self.candidates)
+            self.tie_breaker = TieBreaker(self.candidates, random_seed=self.random_seed)
         return self.tie_breaker.break_ties(tied_objects, reverse_order)
 
 
 # Given a set of candidates, return a fixed number of winners
 class FixedWinnerVotingSystem(VotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, tie_breaker=None):
-        super(FixedWinnerVotingSystem, self).__init__(ballots, tie_breaker)
+    def __init__(self, ballots, tie_breaker=None, random_seed=None):
+        super().__init__(
+            ballots=ballots, tie_breaker=tie_breaker, random_seed=random_seed
+        )
 
     def as_dict(self):
-        data = super(FixedWinnerVotingSystem, self).as_dict()
+        data = super().as_dict()
         if hasattr(self, "tied_winners"):
             data["tied_winners"] = self.tied_winners
         return data
@@ -62,16 +66,18 @@ class FixedWinnerVotingSystem(VotingSystem, metaclass=ABCMeta):
 # Given a set of candidates, return the set of winners
 class MultipleWinnerVotingSystem(FixedWinnerVotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, tie_breaker=None, required_winners=1):
+    def __init__(self, ballots, tie_breaker=None, random_seed=None, required_winners=1):
         self.required_winners = required_winners
-        super(MultipleWinnerVotingSystem, self).__init__(ballots, tie_breaker)
+        super().__init__(
+            ballots=ballots, tie_breaker=tie_breaker, random_seed=random_seed
+        )
 
     def calculate_results(self):
         if self.required_winners == len(self.candidates):
             self.winners = self.candidates
 
     def as_dict(self):
-        data = super(MultipleWinnerVotingSystem, self).as_dict()
+        data = super().as_dict()
         data["winners"] = self.winners
         return data
 
@@ -79,11 +85,13 @@ class MultipleWinnerVotingSystem(FixedWinnerVotingSystem, metaclass=ABCMeta):
 # Given a set of candidates, return a single winners
 class SingleWinnerVotingSystem(FixedWinnerVotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, tie_breaker=None):
-        super(SingleWinnerVotingSystem, self).__init__(ballots, tie_breaker)
+    def __init__(self, ballots, tie_breaker=None, random_seed=None):
+        super().__init__(
+            ballots=ballots, tie_breaker=tie_breaker, random_seed=random_seed
+        )
 
     def as_dict(self):
-        data = super(SingleWinnerVotingSystem, self).as_dict()
+        data = super().as_dict()
         data["winner"] = self.winner
         return data
 
@@ -91,11 +99,9 @@ class SingleWinnerVotingSystem(FixedWinnerVotingSystem, metaclass=ABCMeta):
 # Given a set of candidates, return a fixed number of winners
 class AbstractSingleWinnerVotingSystem(SingleWinnerVotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, multiple_winner_class, tie_breaker=None):
+    def __init__(self, ballots, multiple_winner_class, tie_breaker=None, random_seed=None):
         self.multiple_winner_class = multiple_winner_class
-        super(AbstractSingleWinnerVotingSystem, self).__init__(
-            ballots, tie_breaker=tie_breaker
-        )
+        super().__init__(ballots, tie_breaker=tie_breaker, random_seed=random_seed)
 
     def calculate_results(self):
         self.multiple_winner_instance = self.multiple_winner_class(
@@ -106,7 +112,7 @@ class AbstractSingleWinnerVotingSystem(SingleWinnerVotingSystem, metaclass=ABCMe
         del self.winners
 
     def as_dict(self):
-        data = super(AbstractSingleWinnerVotingSystem, self).as_dict()
+        data = super().as_dict()
         data.update(self.multiple_winner_instance.as_dict())
         del data["winners"]
         return data
@@ -115,12 +121,16 @@ class AbstractSingleWinnerVotingSystem(SingleWinnerVotingSystem, metaclass=ABCMe
 # Given a set of candidates, return an ordering
 class OrderingVotingSystem(VotingSystem, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, tie_breaker=None, winner_threshold=None):
+    def __init__(
+        self, ballots, tie_breaker=None, random_seed=None, winner_threshold=None
+    ):
         self.winner_threshold = winner_threshold
-        super(OrderingVotingSystem, self).__init__(ballots, tie_breaker=tie_breaker)
+        super().__init__(
+            ballots=ballots, tie_breaker=tie_breaker, random_seed=random_seed
+        )
 
     def as_dict(self):
-        data = super(OrderingVotingSystem, self).as_dict()
+        data = super().as_dict()
         data["order"] = self.order
         return data
 
@@ -131,11 +141,11 @@ class OrderingVotingSystem(VotingSystem, metaclass=ABCMeta):
 class AbstractOrderingVotingSystem(OrderingVotingSystem, metaclass=ABCMeta):
     @abstractmethod
     def __init__(
-        self, ballots, single_winner_class, winner_threshold=None, tie_breaker=None
+        self, ballots, single_winner_class, winner_threshold=None, tie_breaker=None, random_seed=None
     ):
         self.single_winner_class = single_winner_class
-        super(AbstractOrderingVotingSystem, self).__init__(
-            ballots, winner_threshold=winner_threshold, tie_breaker=tie_breaker
+        super().__init__(
+            ballots, winner_threshold=winner_threshold, tie_breaker=tie_breaker, random_seed=random_seed
         )
 
     def calculate_results(self):
@@ -179,6 +189,6 @@ class AbstractOrderingVotingSystem(OrderingVotingSystem, metaclass=ABCMeta):
             self.rounds.append(r)
 
     def as_dict(self):
-        data = super(AbstractOrderingVotingSystem, self).as_dict()
+        data = super().as_dict()
         data["rounds"] = self.rounds
         return data

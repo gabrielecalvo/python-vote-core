@@ -25,13 +25,15 @@ import math
 # Alternate counting methods such as Meek's and Warren's would be nice, but
 # would need to be covered in a separate class.
 class STV(MultipleWinnerVotingSystem):
-    def __init__(self, ballots, tie_breaker=None, required_winners=1):
-        super(STV, self).__init__(
-            ballots, tie_breaker=tie_breaker, required_winners=required_winners
+    def __init__(self, ballots, tie_breaker=None, random_seed=None, required_winners=1):
+        super().__init__(
+            ballots,
+            tie_breaker=tie_breaker,
+            random_seed=random_seed,
+            required_winners=required_winners,
         )
 
     def calculate_results(self):
-
         self.candidates = set()
         for ballot in self.ballots:
             ballot["count"] = float(ballot["count"])
@@ -125,7 +127,7 @@ class STV(MultipleWinnerVotingSystem):
             self.winners |= self.remaining_candidates
 
     def as_dict(self):
-        data = super(STV, self).as_dict()
+        data = super().as_dict()
         data["quota"] = self.quota
         data["rounds"] = self.rounds
         if hasattr(self, "remaining_candidates"):

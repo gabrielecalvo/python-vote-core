@@ -109,9 +109,11 @@ class CondorcetHelper(object):
 
 class CondorcetSystem(SingleWinnerVotingSystem, CondorcetHelper, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, ballots, tie_breaker=None, ballot_notation=None):
+    def __init__(
+        self, ballots, tie_breaker=None, random_seed=None, ballot_notation=None
+    ):
         self.standardize_ballots(ballots, ballot_notation)
-        super(CondorcetSystem, self).__init__(self.ballots, tie_breaker=tie_breaker)
+        super().__init__(self.ballots, tie_breaker=tie_breaker, random_seed=random_seed)
 
     def calculate_results(self):
         self.graph = self.ballots_into_graph(self.candidates, self.ballots)
@@ -121,7 +123,7 @@ class CondorcetSystem(SingleWinnerVotingSystem, CondorcetHelper, metaclass=ABCMe
         self.graph_winner()
 
     def as_dict(self):
-        data = super(CondorcetSystem, self).as_dict()
+        data = super().as_dict()
         if hasattr(self, "pairs"):
             data["pairs"] = self.pairs
         if hasattr(self, "strong_pairs"):

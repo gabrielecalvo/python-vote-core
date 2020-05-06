@@ -22,17 +22,25 @@ import itertools
 
 class SchulzeSTV(MultipleWinnerVotingSystem, SchulzeHelper):
     def __init__(
-        self, ballots, tie_breaker=None, required_winners=1, ballot_notation=None
+        self,
+        ballots,
+        tie_breaker=None,
+        random_seed=None,
+        required_winners=1,
+        ballot_notation=None,
     ):
         self.standardize_ballots(ballots, ballot_notation)
-        super(SchulzeSTV, self).__init__(
-            self.ballots, tie_breaker=tie_breaker, required_winners=required_winners
+        super().__init__(
+            self.ballots,
+            tie_breaker=tie_breaker,
+            random_seed=random_seed,
+            required_winners=required_winners,
         )
 
     def calculate_results(self):
 
         # Don't bother if everyone's going to win
-        super(SchulzeSTV, self).calculate_results()
+        super().calculate_results()
         if hasattr(self, "winners"):
             return
 
@@ -75,7 +83,7 @@ class SchulzeSTV(MultipleWinnerVotingSystem, SchulzeHelper):
         del self.winner
 
     def as_dict(self):
-        data = super(SchulzeSTV, self).as_dict()
+        data = super().as_dict()
         if hasattr(self, "actions"):
             data["actions"] = self.actions
         return data

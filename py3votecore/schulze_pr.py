@@ -22,11 +22,19 @@ from pygraph.classes.digraph import digraph
 
 class SchulzePR(OrderingVotingSystem, SchulzeHelper):
     def __init__(
-        self, ballots, tie_breaker=None, winner_threshold=None, ballot_notation=None
+        self,
+        ballots,
+        tie_breaker=None,
+        random_seed=None,
+        winner_threshold=None,
+        ballot_notation=None,
     ):
         self.standardize_ballots(ballots, ballot_notation)
-        super(SchulzePR, self).__init__(
-            self.ballots, tie_breaker=tie_breaker, winner_threshold=winner_threshold,
+        super().__init__(
+            self.ballots,
+            tie_breaker=tie_breaker,
+            random_seed=random_seed,
+            winner_threshold=winner_threshold,
         )
 
     def calculate_results(self):
@@ -90,6 +98,6 @@ class SchulzePR(OrderingVotingSystem, SchulzeHelper):
         del self.winner_threshold
 
     def as_dict(self):
-        data = super(SchulzePR, self).as_dict()
+        data = super().as_dict()
         data["rounds"] = self.rounds
         return data

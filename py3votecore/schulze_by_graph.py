@@ -21,11 +21,9 @@ from pygraph.classes.digraph import digraph
 
 # This class provides Schulze Method results, but bypasses ballots and uses preference tallies instead.
 class SchulzeMethodByGraph(SchulzeMethod):
-    def __init__(self, edges, tie_breaker=None, ballot_notation=None):
+    def __init__(self, edges, tie_breaker=None, random_seed=None, ballot_notation=None):
         self.edges = edges
-        super(SchulzeMethodByGraph, self).__init__(
-            [], tie_breaker=tie_breaker, ballot_notation=ballot_notation
-        )
+        super().__init__([], tie_breaker=tie_breaker, random_seed=random_seed, ballot_notation=ballot_notation)
 
     def standardize_ballots(self, ballots, ballot_notation):
         self.ballots = []
@@ -46,17 +44,18 @@ class SchulzeMethodByGraph(SchulzeMethod):
 
 class SchulzeNPRByGraph(AbstractOrderingVotingSystem, SchulzeHelper):
     def __init__(
-        self, edges, winner_threshold=None, tie_breaker=None, ballot_notation=None
+        self, edges, winner_threshold=None, tie_breaker=None, random_seed=None, ballot_notation=None
     ):
         self.edges = edges
         self.candidates = set([edge[0] for edge, weight in edges.items()]) | set(
             [edge[1] for edge, weight in edges.items()]
         )
-        super(SchulzeNPRByGraph, self).__init__(
+        super().__init__(
             [],
             single_winner_class=SchulzeMethodByGraph,
             winner_threshold=winner_threshold,
             tie_breaker=tie_breaker,
+            random_seed=random_seed,
         )
 
     def ballots_without_candidate(self, ballots, candidate):
@@ -71,4 +70,4 @@ class SchulzeNPRByGraph(AbstractOrderingVotingSystem, SchulzeHelper):
 
     def calculate_results(self):
         self.ballots = self.edges
-        super(SchulzeNPRByGraph, self).calculate_results()
+        super().calculate_results()

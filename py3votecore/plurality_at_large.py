@@ -20,9 +20,12 @@ import copy
 
 
 class PluralityAtLarge(MultipleWinnerVotingSystem):
-    def __init__(self, ballots, tie_breaker=None, required_winners=1):
-        super(PluralityAtLarge, self).__init__(
-            ballots, tie_breaker=tie_breaker, required_winners=required_winners
+    def __init__(self, ballots, tie_breaker=None, random_seed=None, required_winners=1):
+        super().__init__(
+            ballots,
+            tie_breaker=tie_breaker,
+            random_seed=random_seed,
+            required_winners=required_winners,
         )
 
     def calculate_results(self):
@@ -71,6 +74,6 @@ class PluralityAtLarge(MultipleWinnerVotingSystem):
         self.winners = winning_candidates
 
     def as_dict(self):
-        data = super(PluralityAtLarge, self).as_dict()
+        data = super().as_dict()
         data["tallies"] = self.tallies
         return data

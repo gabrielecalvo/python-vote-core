@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from copy import copy
-import random
+from random import Random
 import types
 
 
@@ -22,10 +22,11 @@ import types
 class TieBreaker(object):
 
     #
-    def __init__(self, candidate_range):
+    def __init__(self, candidate_range, random_seed=None):
         self.ties_broken = False
         self.random_ordering = list(candidate_range)
         if not isinstance(candidate_range, list):
+            random = Random(random_seed)
             random.shuffle(self.random_ordering)
 
     #

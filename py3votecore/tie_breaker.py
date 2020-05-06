@@ -24,10 +24,12 @@ class TieBreaker(object):
     #
     def __init__(self, candidate_range, random_seed=None):
         self.ties_broken = False
-        self.random_ordering = list(candidate_range)
         if not isinstance(candidate_range, list):
+            self.random_ordering = sorted(candidate_range)
             random = Random(random_seed)
             random.shuffle(self.random_ordering)
+        else:
+            self.random_ordering = candidate_range
 
     #
     def break_ties(self, tied_candidates, reverse=False):

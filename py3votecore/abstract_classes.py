@@ -107,7 +107,10 @@ class AbstractSingleWinnerVotingSystem(SingleWinnerVotingSystem, metaclass=ABCMe
 
     def calculate_results(self):
         self.multiple_winner_instance = self.multiple_winner_class(
-            self.ballots, tie_breaker=self.tie_breaker, required_winners=1
+            self.ballots,
+            tie_breaker=self.tie_breaker,
+            random_seed=self.random_seed,
+            required_winners=1,
         )
         self.__dict__.update(self.multiple_winner_instance.__dict__)
         self.winner = list(self.winners)[0]

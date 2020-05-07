@@ -34,7 +34,7 @@ class TestPlurality(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["c1", "c2", "c3"]),
+                "candidates": {"c1", "c2", "c3"},
                 "tallies": {"c3": 23, "c2": 22, "c1": 26},
                 "winner": "c1",
             },
@@ -55,7 +55,7 @@ class TestPlurality(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["c1", "c2", "c3"]),
+                "candidates": {"c1", "c2", "c3"},
                 "tallies": {"c3": 23, "c2": 22, "c1": 26},
                 "winner": "c1",
             },
@@ -76,7 +76,7 @@ class TestPlurality(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["c1", "c2", "c3"]),
+                "candidates": {"c1", "c2", "c3"},
                 "tallies": {"c3": 23, "c2": 23, "c1": 26},
                 "winner": "c1",
             },
@@ -95,7 +95,7 @@ class TestPlurality(unittest.TestCase):
 
         # Run tests
         self.assertEqual(output["tallies"], {"c1": 26, "c2": 26, "c3": 23})
-        self.assertEqual(output["tied_winners"], set(["c1", "c2"]))
+        self.assertEqual(output["tied_winners"], {"c1", "c2"})
         self.assertTrue(output["winner"] in output["tied_winners"])
         self.assertEqual(len(output["tie_breaker"]), 3)
 

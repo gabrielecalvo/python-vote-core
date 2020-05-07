@@ -1,3 +1,6 @@
+import collections
+
+
 def matching_keys(dict, target_value):
     return set([key for key, value in dict.items() if value == target_value])
 
@@ -15,3 +18,10 @@ def unique_permutations(xs):
             ts.remove(x)
             for ps in unique_permutations(ts):
                 yield [x] + ps
+
+
+def ensure_listlike(x):
+    if isinstance(x, collections.Iterable) and not isinstance(x, str):
+        return x
+    else:
+        return [x]

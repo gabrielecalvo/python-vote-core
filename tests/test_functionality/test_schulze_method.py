@@ -39,7 +39,7 @@ class TestSchulzeMethod(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["A", "C", "B", "D"]),
+                "candidates": {"A", "C", "B", "D"},
                 "pairs": {
                     ("A", "B"): 16,
                     ("A", "C"): 17,
@@ -63,11 +63,11 @@ class TestSchulzeMethod(unittest.TestCase):
                     ("A", "B"): 16,
                 },
                 "actions": [
-                    {"edges": set([("A", "B")])},
-                    {"edges": set([("A", "C")])},
-                    {"nodes": set(["A"])},
-                    {"edges": set([("B", "C")])},
-                    {"nodes": set(["B", "D"])},
+                    {"edges": {("A", "B")}},
+                    {"edges": {("A", "C")}},
+                    {"nodes": {"A"}},
+                    {"edges": {("B", "C")}},
+                    {"nodes": {"B", "D"}},
                 ],
                 "winner": "C",
             },
@@ -95,7 +95,7 @@ class TestSchulzeMethod(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["A", "C", "B", "E", "D"]),
+                "candidates": {"A", "C", "B", "E", "D"},
                 "pairs": {
                     ("A", "B"): 20,
                     ("A", "C"): 26,
@@ -131,9 +131,9 @@ class TestSchulzeMethod(unittest.TestCase):
                     ("E", "A"): 23,
                 },
                 "actions": [
-                    {"edges": set([("E", "A")])},
-                    {"edges": set([("C", "E")])},
-                    {"nodes": set(["A", "C", "B", "D"])},
+                    {"edges": {("E", "A")}},
+                    {"edges": {("C", "E")}},
+                    {"nodes": {"A", "C", "B", "D"}},
                 ],
                 "winner": "E",
             },
@@ -151,7 +151,7 @@ class TestSchulzeMethod(unittest.TestCase):
         ).as_dict()
 
         # Run tests
-        self.assertEqual(output["candidates"], set(["A", "B", "C"]))
+        self.assertEqual(output["candidates"], {"A", "B", "C"})
         self.assertEqual(
             output["pairs"],
             {
@@ -163,8 +163,8 @@ class TestSchulzeMethod(unittest.TestCase):
                 ("C", "B"): 0,
             },
         )
-        self.assertEqual(output["strong_pairs"], {("A", "C"): 2, ("B", "C"): 1,})
-        self.assertEqual(output["tied_winners"], set(["A", "B"]))
+        self.assertEqual(output["strong_pairs"], {("A", "C"): 2, ("B", "C"): 1})
+        self.assertEqual(output["tied_winners"], {"A", "B"})
 
 
 if __name__ == "__main__":

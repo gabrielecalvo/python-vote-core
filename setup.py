@@ -33,5 +33,5 @@ setup(
     zip_safe=False,
     install_requires=requires,
     tests_require=requires,
-    test_suite="test_functionality",
+    test_suite="tests",
 )

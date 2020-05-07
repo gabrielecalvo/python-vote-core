@@ -14,9 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .abstract_classes import MultipleWinnerVotingSystem
-from .common_functions import matching_keys
-import types
+from .common_functions import matching_keys, ensure_listlike
 import copy
+import warnings
 
 
 class PluralityAtLarge(MultipleWinnerVotingSystem):
@@ -30,17 +30,20 @@ class PluralityAtLarge(MultipleWinnerVotingSystem):
 
     def calculate_results(self):
 
+        ballot_lengths = [len(ensure_listlike(b["ballot"])) for b in self.ballots]
+        if max(ballot_lengths) > self.required_winners:
+            warnings.warn(
+                f"Ballots contained too many candidates, only the first {self.required_winners} choice(s) will be counted"
+            )
+
         # Standardize the ballot format and extract the candidates
         self.candidates = set()
         for ballot in self.ballots:
 
-            # Convert single candidate ballots into ballot lists
-            if not isinstance(ballot["ballot"], list):
-                ballot["ballot"] = [ballot["ballot"]]
-
-            # Ensure no ballot has an excess of votes
-            if len(ballot["ballot"]) > self.required_winners:
-                raise Exception("A ballot contained too many candidates")
+            # Convert single candidate ballots into ballot lists with max length = required_winners
+            ballot["ballot"] = ensure_listlike(ballot["ballot"])[
+                : self.required_winners
+            ]
 
             # Add all candidates on the ballot to the set
             self.candidates.update(set(ballot["ballot"]))

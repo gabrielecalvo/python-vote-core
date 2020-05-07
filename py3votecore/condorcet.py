@@ -15,12 +15,12 @@
 
 from abc import ABCMeta, abstractmethod
 from .abstract_classes import SingleWinnerVotingSystem
+from .common_functions import ensure_listlike
 from pygraph.classes.digraph import digraph
 import itertools
 
 
 class CondorcetHelper(object):
-
     BALLOT_NOTATION_GROUPING = 0
     BALLOT_NOTATION_RANKING = 1
     BALLOT_NOTATION_RATING = 2
@@ -35,6 +35,7 @@ class CondorcetHelper(object):
                 r = 0
                 for rank in ballot["ballot"]:
                     r += 1
+                    rank = ensure_listlike(rank)
                     for candidate in rank:
                         new_ballot[candidate] = r
                 ballot["ballot"] = new_ballot

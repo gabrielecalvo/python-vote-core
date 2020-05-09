@@ -25,3 +25,20 @@ def ensure_listlike(x):
         return x
     else:
         return [x]
+
+
+def get_placement_from_tallies(tallies):
+    revdict = collections.defaultdict(list)
+    for k, v in tallies.items():
+        revdict[v].append(k)
+
+    result = [{'points': k, 'candidates': v} for k, v in revdict.items()]
+    result = sorted(result, key=lambda x: x['points'], reverse=True)
+    return result
+
+
+def get_candidates_from_ballots(ballots):
+    candidates = set()
+    for b in ballots:
+        candidates |= set(ensure_listlike(b['ballot']))
+    return candidates

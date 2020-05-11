@@ -53,5 +53,6 @@ class BordaCount:
                 }
             ],
             "winner": self.winner,
+            "placements": get_placement_from_tallies(self.tallies)
         }
         return data

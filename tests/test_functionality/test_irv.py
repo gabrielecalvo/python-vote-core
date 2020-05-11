@@ -28,7 +28,7 @@ class TestInstantRunoff(unittest.TestCase):
             {"count": 20, "ballot": ["c2", "c3", "c1"]},
             {"count": 23, "ballot": ["c3", "c1", "c2"]},
         ]
-        output = IRV(input).as_dict()
+        output = IRV(input, random_seed=0).as_dict()
 
         # Run tests
         self.assertEqual(
@@ -41,6 +41,8 @@ class TestInstantRunoff(unittest.TestCase):
                     {"tallies": {"c3": 23.0, "c2": 20.0, "c1": 26.0}, "loser": "c2"},
                     {"tallies": {"c3": 43.0, "c1": 26.0}, "winner": "c3"},
                 ],
+                'placements': [{'candidates': {'c3'}, 'points': 43.0},
+                               {'candidates': {'c1'}, 'points': 26.0}],
             },
         )
 
@@ -71,6 +73,8 @@ class TestInstantRunoff(unittest.TestCase):
                 ],
                 "tie_breaker": ["c1", "c3", "c2"],
                 "winner": "c3",
+                'placements': [{'candidates': {'c3'}, 'points': 40.0},
+                               {'candidates': {'c1'}, 'points': 26.0}],
             },
         )
 
@@ -83,7 +87,7 @@ class TestInstantRunoff(unittest.TestCase):
             {"count": 20, "ballot": ["c2", "c3", "c1"]},
             {"count": 20, "ballot": ["c3", "c1", "c2"]},
         ]
-        output = IRV(input).as_dict()
+        output = IRV(input, random_seed=0).as_dict()
 
         # Run tests
         self.assertEqual(
@@ -95,6 +99,8 @@ class TestInstantRunoff(unittest.TestCase):
                 "rounds": [
                     {"tallies": {"c3": 20.0, "c2": 20.0, "c1": 56.0}, "winner": "c1"}
                 ],
+                'placements': [{'candidates': {'c1'}, 'points': 56.0},
+                               {'candidates': {'c2', 'c3'}, 'points': 20.0}],
             },
         )
 

@@ -10,12 +10,14 @@ def test_BordaCount():
     actual = BordaCount(input).as_dict()
 
     expected = {
-            "candidates": {"c1", "c2", "c3"},
-            "winner": "c1",
-            "rounds": [
-                {"tallies": {"c1": 144.0, "c2": 135.0, "c3": 135.0}, "winner": "c1"},
-            ],
-        }
+        "candidates": {"c1", "c2", "c3"},
+        "winner": "c1",
+        "rounds": [
+            {"tallies": {"c1": 144.0, "c2": 135.0, "c3": 135.0}, "winner": "c1"},
+        ],
+        'placements': [{'candidates': {'c1'}, 'points': 144.0},
+                       {'candidates': {'c2', 'c3'}, 'points': 135.0}],
+    }
 
     # Run tests
     assert actual == expected

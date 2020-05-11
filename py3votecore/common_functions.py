@@ -32,7 +32,7 @@ def get_placement_from_tallies(tallies):
     for k, v in tallies.items():
         revdict[v].append(k)
 
-    result = [{'points': k, 'candidates': v} for k, v in revdict.items()]
+    result = [{'points': k, 'candidates': set(v)} for k, v in revdict.items()]
     result = sorted(result, key=lambda x: x['points'], reverse=True)
     return result
 

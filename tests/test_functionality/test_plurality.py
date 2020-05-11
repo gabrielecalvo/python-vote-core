@@ -37,6 +37,9 @@ class TestPlurality(unittest.TestCase):
                 "candidates": {"c1", "c2", "c3"},
                 "tallies": {"c3": 23, "c2": 22, "c1": 26},
                 "winner": "c1",
+                'placements': [{'candidates': {'c1'}, 'points': 26},
+                               {'candidates': {'c3'}, 'points': 23},
+                               {'candidates': {'c2'}, 'points': 22}],
             },
         )
 
@@ -58,6 +61,9 @@ class TestPlurality(unittest.TestCase):
                 "candidates": {"c1", "c2", "c3"},
                 "tallies": {"c3": 23, "c2": 22, "c1": 26},
                 "winner": "c1",
+                'placements': [{'candidates': {'c1'}, 'points': 26},
+                               {'candidates': {'c3'}, 'points': 23},
+                               {'candidates': {'c2'}, 'points': 22}],
             },
         )
 
@@ -70,7 +76,7 @@ class TestPlurality(unittest.TestCase):
             {"count": 23, "ballot": "c2"},
             {"count": 23, "ballot": "c3"},
         ]
-        output = Plurality(input).as_dict()
+        output = Plurality(input, random_seed=0).as_dict()
 
         # Run tests
         self.assertEqual(
@@ -79,6 +85,8 @@ class TestPlurality(unittest.TestCase):
                 "candidates": {"c1", "c2", "c3"},
                 "tallies": {"c3": 23, "c2": 23, "c1": 26},
                 "winner": "c1",
+                'placements': [{'candidates': {'c1'}, 'points': 26},
+                               {'candidates': {'c2', 'c3'}, 'points': 23}],
             },
         )
 

@@ -70,6 +70,10 @@ class TestSchulzeMethod(unittest.TestCase):
                     {"nodes": {"B", "D"}},
                 ],
                 "winner": "C",
+                'placements': [{'candidates': {'C'}},
+                               {'candidates': {'D'}, 'points': 39},
+                               {'candidates': {'A'}, 'points': 33},
+                               {'candidates': {'B'}, 'points': 19}],
             },
         )
 
@@ -136,6 +140,11 @@ class TestSchulzeMethod(unittest.TestCase):
                     {"nodes": {"A", "C", "B", "D"}},
                 ],
                 "winner": "E",
+                'placements': [{'candidates': {'E'}},
+                               {'candidates': {'B'}, 'points': 58},
+                               {'candidates': {'A'}, 'points': 56},
+                               {'candidates': {'C'}, 'points': 53},
+                               {'candidates': {'D'}, 'points': 28}],
             },
         )
 

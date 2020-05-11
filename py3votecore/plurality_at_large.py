@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .abstract_classes import MultipleWinnerVotingSystem
-from .common_functions import matching_keys, ensure_listlike
+from .common_functions import matching_keys, ensure_listlike, get_placement_from_tallies
 import copy
 import warnings
 
@@ -79,4 +79,5 @@ class PluralityAtLarge(MultipleWinnerVotingSystem):
     def as_dict(self):
         data = super().as_dict()
         data["tallies"] = self.tallies
+        data['placements'] = get_placement_from_tallies(data['tallies'])
         return data

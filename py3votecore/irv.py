@@ -1,5 +1,6 @@
 from .abstract_classes import AbstractSingleWinnerVotingSystem
 from .stv import STV
+from .common_functions import get_placement_from_tallies
 
 
 class IRV(AbstractSingleWinnerVotingSystem):
@@ -13,6 +14,7 @@ class IRV(AbstractSingleWinnerVotingSystem):
     def as_dict(self):
         data = super().as_dict()
         IRV.singularize(data["rounds"])
+        data['placements'] = get_placement_from_tallies(data["rounds"][-1]["tallies"])
         return data
 
     @staticmethod

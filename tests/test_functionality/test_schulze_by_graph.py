@@ -35,10 +35,13 @@ class TestSchulzeMethodByGraph(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["a", "b", "c"]),
+                "candidates": {"a", "b", "c"},
                 "pairs": input,
                 "strong_pairs": {("a", "b"): 4, ("a", "c"): 4, ("b", "c"): 4,},
                 "winner": "a",
+                'placements': [{'candidates': {'a'}},
+                               {'candidates': {'b'}, 'points': 4},
+                               {'candidates': {'c'}, 'points': 0}],
             },
         )
 

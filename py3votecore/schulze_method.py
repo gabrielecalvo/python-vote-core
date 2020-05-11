@@ -15,12 +15,13 @@
 
 from .schulze_helper import SchulzeHelper
 from .condorcet import CondorcetSystem
+from .common_functions import get_placement_from_tallies
 
 
 # This class implements the Schulze Method (aka the beatpath method)
 class SchulzeMethod(CondorcetSystem, SchulzeHelper):
     def __init__(
-        self, ballots, tie_breaker=None, random_seed=None, ballot_notation=None
+            self, ballots, tie_breaker=None, random_seed=None, ballot_notation=None
     ):
         super().__init__(
             ballots,
@@ -29,8 +30,24 @@ class SchulzeMethod(CondorcetSystem, SchulzeHelper):
             ballot_notation=ballot_notation,
         )
 
+    def get_placements_from_pairs(self, data):
+        winner = data['winner']
+        placements = [
+            {'candidates': {data['winner']}},
+        ]
+
+        points = {c: 0 for c in data['candidates'] if c != winner}
+        for k, v in data['strong_pairs'].items():
+            if k[0] == winner: continue
+            points[k[0]] += v
+
+        placements += get_placement_from_tallies(points)
+        return placements
+
     def as_dict(self):
         data = super().as_dict()
         if hasattr(self, "actions"):
             data["actions"] = self.actions
+        data['placements'] = self.get_placements_from_pairs(data)
+
         return data

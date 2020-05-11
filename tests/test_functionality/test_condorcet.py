@@ -36,7 +36,7 @@ class TestCondorcet(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["Carter", "Brad", "Andrea"]),
+                "candidates": {"Carter", "Brad", "Andrea"},
                 "pairs": {
                     ("Andrea", "Brad"): 63,
                     ("Brad", "Carter"): 39,
@@ -51,6 +51,9 @@ class TestCondorcet(unittest.TestCase):
                     ("Andrea", "Carter"): 50,
                 },
                 "winner": "Andrea",
+                'placements': [{'candidates': {'Andrea'}},
+                               {'candidates': {'Carter'}, 'points': 51},
+                               {'candidates': {'Brad'}, 'points': 0}],
             },
         )
 
@@ -72,7 +75,7 @@ class TestCondorcet(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["Carter", "Brad", "Andrea"]),
+                "candidates": {"Carter", "Brad", "Andrea"},
                 "pairs": {
                     ("Andrea", "Brad"): 63,
                     ("Brad", "Carter"): 39,
@@ -87,6 +90,9 @@ class TestCondorcet(unittest.TestCase):
                     ("Andrea", "Carter"): 50,
                 },
                 "winner": "Andrea",
+                'placements': [{'candidates': {'Andrea'}},
+                               {'candidates': {'Carter'}, 'points': 51},
+                               {'candidates': {'Brad'}, 'points': 0}],
             },
         )
 
@@ -108,7 +114,7 @@ class TestCondorcet(unittest.TestCase):
         self.assertEqual(
             output,
             {
-                "candidates": set(["Carter", "Brad", "Andrea"]),
+                "candidates": {"Carter", "Brad", "Andrea"},
                 "pairs": {
                     ("Andrea", "Brad"): 63,
                     ("Brad", "Carter"): 39,
@@ -123,6 +129,9 @@ class TestCondorcet(unittest.TestCase):
                     ("Andrea", "Carter"): 50,
                 },
                 "winner": "Andrea",
+                'placements': [{'candidates': {'Andrea'}},
+                               {'candidates': {'Carter'}, 'points': 51},
+                               {'candidates': {'Brad'}, 'points': 0}],
             },
         )
 

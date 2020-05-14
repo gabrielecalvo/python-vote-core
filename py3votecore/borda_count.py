@@ -1,6 +1,7 @@
 from .common_functions import ensure_listlike, get_placement_from_tallies, get_candidates_from_ballots
 from collections import defaultdict
 from .tie_breaker import TieBreaker
+from copy import deepcopy
 
 
 class BordaCount:

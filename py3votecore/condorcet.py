@@ -18,6 +18,7 @@ from .abstract_classes import SingleWinnerVotingSystem
 from .common_functions import ensure_listlike
 from pygraph.classes.digraph import digraph
 import itertools
+from copy import deepcopy
 
 
 class CondorcetHelper(object):
@@ -27,7 +28,7 @@ class CondorcetHelper(object):
 
     def standardize_ballots(self, ballots, ballot_notation):
 
-        self.ballots = ballots
+        self.ballots = deepcopy(ballots)
         if ballot_notation == CondorcetHelper.BALLOT_NOTATION_GROUPING:
             for ballot in self.ballots:
                 ballot["ballot"].reverse()

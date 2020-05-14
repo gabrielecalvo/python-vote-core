@@ -155,6 +155,11 @@ class TestSchulzeMethod(unittest.TestCase):
             {"count": 1, "ballot": [["A"], ["B", "C"]]},
             {"count": 1, "ballot": [["B"], ["A"], ["C"]]},
         ]
+        input_copy = [
+            {"count": 1, "ballot": [["A"], ["B", "C"]]},
+            {"count": 1, "ballot": [["B"], ["A"], ["C"]]},
+        ]
+
         output = SchulzeMethod(
             input, ballot_notation=SchulzeMethod.BALLOT_NOTATION_GROUPING
         ).as_dict()
@@ -174,6 +179,7 @@ class TestSchulzeMethod(unittest.TestCase):
         )
         self.assertEqual(output["strong_pairs"], {("A", "C"): 2, ("B", "C"): 1})
         self.assertEqual(output["tied_winners"], {"A", "B"})
+        self.assertEqual(input, input_copy)
 
 
 if __name__ == "__main__":

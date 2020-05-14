@@ -107,6 +107,5 @@ class TestPlurality(unittest.TestCase):
         self.assertTrue(output["winner"] in output["tied_winners"])
         self.assertEqual(len(output["tie_breaker"]), 3)
 
-
 if __name__ == "__main__":
     unittest.main()
